@@ -1,0 +1,16 @@
+# Keep the build context free of caches, test material and local metadata.
+.git
+.git/**
+**/.git/**
+**/.DS_Store
+**/__MACOSX/**
+**/__pycache__/**
+**/*.pyc
+**/*.pyo
+**/.pytest_cache/**
+**/tests/**
+**/.env
+**/.env.*
+**/*.zip
+**/*.tar
+**/*.tar.gz

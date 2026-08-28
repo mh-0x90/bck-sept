@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ flow_label }} {{ record.id }} · Parcelpad{% endblock %}
+{% block content %}
+<section class="flow" id="flow" data-stage="{{ record.stage }}" data-status="{{ record.status }}">
+  <div class="flow-head">
+    <div>
+      <p class="eyebrow">{{ flow_label }}</p>
+      <h1>{{ record.id }}</h1>
+    </div>
+    <a class="button secondary" href="{{ download_endpoint }}" target="_blank" rel="noopener">Download</a>
+  </div>
+
+  <div class="progress-row">
+    <span id="stage-number">Stage {{ record.stage }} of 10</span>
+    <progress id="progress" max="10" value="{{ record.stage }}">{{ record.stage }}/10</progress>
+  </div>
+
+  <section class="stage-card" id="stage-card">
+    <h2 id="stage-title">{{ stage_title }}</h2>
+    {% if error %}<p class="notice error" role="alert">{{ error }}</p>{% endif %}
+    <div id="stage-body">
+      {% if record.stage == 10 and record.status == 'finalizing' %}
+        <div class="processing" role="status"><span class="spinner" aria-hidden="true"></span><p>Final processing is in progress.</p></div>
+      {% else %}
+        <dl class="details">
+          {% for label, value in fields %}
+          <div><dt>{{ label }}</dt><dd>{{ value }}</dd></div>
+          {% endfor %}
+        </dl>
+        {% if record.stage == 10 %}
+          <p class="notice" id="completion-message">Processing complete.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="actions" id="actions">
+    {% if 1 < record.stage < 10 %}
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="back">
+      <button class="button secondary" type="submit">Back</button>
+    </form>
+    {% endif %}
+
+    {% if record.stage <= 8 %}
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="next">
+      <button class="button" type="submit">Next</button>
+    </form>
+    {% elif record.stage == 9 %}
+    <form method="post" action="{{ finalize_endpoint }}" id="finalize-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="button" type="submit">Finalize</button>
+    </form>
+    {% else %}
+    <a class="button" href="{{ url_for('home.home') }}">Back to operations</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

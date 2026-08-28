@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Northstar Mail</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <div class="brand-mark">N</div>
+
+        <div>
+          <strong>Northstar Mail</strong>
+          <span>Workspace</span>
+        </div>
+      </div>
+
+      <button class="compose" type="button">
+        + Compose
+      </button>
+
+      <nav class="folders" aria-label="Mailbox folders">
+
+        <button class="folder active">
+          <span>Inbox</span>
+          <strong>6</strong>
+        </button>
+
+        <button class="folder">
+          <span>Starred</span>
+          <strong>2</strong>
+        </button>
+
+        <button class="folder">
+          <span>Sent</span>
+        </button>
+
+        <button class="folder">
+          <span>Drafts</span>
+          <strong>1</strong>
+        </button>
+
+        <button class="folder">
+          <span>Archive</span>
+        </button>
+
+      </nav>
+
+      <div class="storage">
+        <span>Storage</span>
+
+        <div class="storage-bar">
+          <i></i>
+        </div>
+
+        <small>2.8 GB of 15 GB used</small>
+      </div>
+
+    </aside>
+
+
+    <main class="workspace">
+
+      <header class="topbar">
+
+        <div>
+          <h1>Inbox</h1>
+          <p>6 unread messages</p>
+        </div>
+
+        <div class="top-actions">
+
+          <input
+            class="search"
+            type="search"
+            placeholder="Search mail"
+          >
+
+          <div class="avatar">
+            AM
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <section class="content-grid">
+
+        <aside class="message-list" aria-label="Messages">
+
+          <article class="message active">
+
+            <div class="message-top">
+              <strong>IT Operations</strong>
+              <time>09:42</time>
+            </div>
+
+            <h2>VPN access approved</h2>
+
+            <p>
+              Your access request has been reviewed.
+              Open the message to view the setup details.
+            </p>
+
+          </article>
+
+
+          <article class="message unread">
+
+            <div class="message-top">
+              <strong>People Team</strong>
+              <time>08:16</time>
+            </div>
+
+            <h2>Benefits enrollment reminder</h2>
+
+            <p>
+              Enrollment closes this Friday.
+              Please review your current selections.
+            </p>
+
+          </article>
+
+
+          <article class="message unread">
+
+            <div class="message-top">
+              <strong>Build Monitor</strong>
+              <time>Yesterday</time>
+            </div>
+
+            <h2>Nightly pipeline completed</h2>
+
+            <p>
+              All production checks completed successfully
+              with two informational warnings.
+            </p>
+
+          </article>
+
+
+          <article class="message">
+
+            <div class="message-top">
+              <strong>Finance Desk</strong>
+              <time>Mon</time>
+            </div>
+
+            <h2>Expense report received</h2>
+
+            <p>
+              Your July travel expense report is now
+              awaiting manager approval.
+            </p>
+
+          </article>
+
+
+          <article class="message">
+
+            <div class="message-top">
+              <strong>Project Atlas</strong>
+              <time>Mon</time>
+            </div>
+
+            <h2>Weekly project digest</h2>
+
+            <p>
+              Three milestones were completed and the
+              release candidate is ready for review.
+            </p>
+
+          </article>
+
+        </aside>
+
+
+        <section class="reader-panel">
+
+          <div class="reader-toolbar">
+
+            <div>
+              <span class="eyebrow">
+                Mail preview
+              </span>
+
+              <h2>
+                Open an email package
+              </h2>
+            </div>
+
+            <span class="status-dot">
+              Local viewer
+            </span>
+
+          </div>
+
+
+          <div class="loader-card">
+
+            <div class="mode-tabs" role="tablist">
+
+              <button
+                id="serverTab"
+                class="tab active"
+                type="button">
+                Server files
+              </button>
+
+              <button
+                id="uploadTab"
+                class="tab"
+                type="button">
+                Upload files
+              </button>
+
+            </div>
+
+
+            <!-- SERVER FILE MODE -->
+
+            <div
+              id="serverMode"
+              class="load-mode">
+
+              <div class="field-grid">
+
+                <label>
+
+                  HTML filename
+
+                  <input
+                    id="htmlName"
+                    type="text"
+                    value="client_email.html"
+                    placeholder="client_email.html"
+                    autocomplete="off">
+
+                </label>
+
+
+                <label>
+
+                  CSS filename
+
+                  <input
+                    id="cssName"
+                    type="text"
+                    value="client.css"
+                    placeholder="client.css"
+                    autocomplete="off">
+
+                </label>
+
+              </div>
+
+
+              <button
+                id="loadServer"
+                class="primary"
+                type="button">
+
+                Open message
+
+              </button>
+
+            </div>
+
+
+            <!-- UPLOAD MODE -->
+
+            <div
+              id="uploadMode"
+              class="load-mode hidden">
+
+              <div class="field-grid">
+
+                <label>
+
+                  HTML file
+
+                  <input
+                    id="htmlUpload"
+                    type="file"
+                    accept=".html,text/html">
+
+                </label>
+
+
+                <label>
+
+                  CSS file
+
+                  <input
+                    id="cssUpload"
+                    type="file"
+                    accept=".css,text/css">
+
+                </label>
+
+              </div>
+
+
+              <button
+                id="loadUpload"
+                class="primary"
+                type="button">
+
+                Open uploaded message
+
+              </button>
+
+            </div>
+
+
+            <p
+              id="notice"
+              class="notice"
+              aria-live="polite">
+            </p>
+
+          </div>
+
+
+          <div class="message-header">
+
+            <div class="sender-avatar">
+              IO
+            </div>
+
+            <div>
+
+              <strong>
+                IT Operations
+              </strong>
+
+              <span>
+                to me &lt;alex.meyer@northstar.local&gt;
+              </span>
+
+            </div>
+
+            <time>
+              Aug 18, 2026, 09:42
+            </time>
+
+          </div>
+
+
+          <div
+            id="mailViewer"
+            class="mail-viewer">
+
+            <div class="empty-state">
+
+              <strong>
+                No message loaded yet
+              </strong>
+
+              <span>
+                Choose server files or upload
+                an HTML and CSS pair.
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <script>
+
+    const viewer =
+      document.getElementById('mailViewer');
+
+    const notice =
+      document.getElementById('notice');
+
+    const serverTab =
+      document.getElementById('serverTab');
+
+    const uploadTab =
+      document.getElementById('uploadTab');
+
+    const serverMode =
+      document.getElementById('serverMode');
+
+    const uploadMode =
+      document.getElementById('uploadMode');
+
+
+    /* -------------------------
+       VIEW MODE
+    ------------------------- */
+
+    function setMode(mode) {
+
+      const server = mode === 'server';
+
+      serverTab.classList.toggle(
+        'active',
+        server
+      );
+
+      uploadTab.classList.toggle(
+        'active',
+        !server
+      );
+
+      serverMode.classList.toggle(
+        'hidden',
+        !server
+      );
+
+      uploadMode.classList.toggle(
+        'hidden',
+        server
+      );
+
+      notice.textContent = '';
+    }
+
+
+    /* -------------------------
+       FILENAME VALIDATION
+    ------------------------- */
+
+    function validFilename(name, extension) {
+
+      return (
+        /^[A-Za-z0-9._-]+$/.test(name) &&
+        name.toLowerCase().endsWith(extension)
+      );
+    }
+
+
+    /* -------------------------
+       CSS SANITIZER
+    ------------------------- */
+
+    function sanitizeCss(css) {
+
+      const forbidden = [
+
+        /@import\b/gi,
+
+        /expression\s*\(/gi,
+
+        /javascript\s*:/gi,
+
+        /-moz-binding\s*:/gi,
+
+        /behavior\s*:/gi,
+
+        /@font-face\b/gi
+
+      ];
+
+
+      if (
+        forbidden.some(
+          pattern => pattern.test(css)
+        )
+      ) {
+
+        throw new Error(
+          'Unsafe CSS blocked'
+        );
+      }
+
+
+      return css
+
+        .replace(
+          /position\s*:\s*(fixed|sticky)\s*;?/gi,
+          ''
+        )
+
+        .replace(
+          /z-index\s*:\s*[^;}]+;?/gi,
+          ''
+        );
+    }
+
+
+    /* -------------------------
+       HTML SANITIZER
+    ------------------------- */
+
+    function sanitizeHtml(html) {
+
+      return DOMPurify.sanitize(
+        html,
+        {
+
+          USE_PROFILES: {
+            html: true
+          },
+
+          FORBID_TAGS: [
+
+            'script',
+
+            'iframe',
+
+            'object',
+
+            'embed',
+
+            'link',
+
+            'meta',
+
+            'base',
+
+            'form'
+
+          ],
+
+          FORBID_ATTR: [
+            'srcdoc'
+          ]
+
+        }
+      );
+    }
+
+
+    /* -------------------------
+       RENDER MAIL
+    ------------------------- */
+
+    function renderMail(html, css) {
+
+      try {
+
+        /*
+         * Sanitize both inputs BEFORE
+         * adding anything to the DOM.
+         */
+
+        const cleanHtml =
+          sanitizeHtml(html);
+
+        const cleanCss =
+          sanitizeCss(css);
+
+
+        /*
+         * Remove previously displayed
+         * email.
+         */
+
+        viewer.replaceChildren();
+
+
+        /*
+         * Create an isolated container
+         * for the email.
+         */
+
+        const host =
+          document.createElement('div');
+
+        host.className =
+          'mail-content-host';
+
+
+        /*
+         * Shadow DOM prevents the email
+         * stylesheet from styling the
+         * Northstar interface.
+         */
+
+        const shadow =
+          host.attachShadow({
+            mode: 'closed'
+          });
+
+
+        /*
+         * Add sanitized email CSS.
+         */
+
+        const style =
+          document.createElement('style');
+
+        style.textContent =
+          cleanCss;
+
+
+        /*
+         * Add sanitized email HTML.
+         */
+
+        const content =
+          document.createElement('div');
+
+        content.className =
+          'mail-content';
+
+        content.innerHTML =
+          cleanHtml;
+
+
+        shadow.append(
+          style,
+          content
+        );
+
+
+        viewer.appendChild(host);
+
+
+        notice.textContent =
+          'Message loaded.';
+
+      } catch {
+
+        viewer.replaceChildren();
+
+        notice.textContent =
+          'Message blocked because unsafe content was detected.';
+
+      }
+    }
+
+
+    /* -------------------------
+       TABS
+    ------------------------- */
+
+    serverTab.addEventListener(
+      'click',
+      () => setMode('server')
+    );
+
+
+    uploadTab.addEventListener(
+      'click',
+      () => setMode('upload')
+    );
+
+
+    /* -------------------------
+       LOAD SERVER FILES
+    ------------------------- */
+
+    document
+      .getElementById('loadServer')
+      .addEventListener(
+        'click',
+        async () => {
+
+          const htmlName =
+            document
+              .getElementById('htmlName')
+              .value
+              .trim();
+
+
+          const cssName =
+            document
+              .getElementById('cssName')
+              .value
+              .trim();
+
+
+          if (
+            !validFilename(
+              htmlName,
+              '.html'
+            ) ||
+
+            !validFilename(
+              cssName,
+              '.css'
+            )
+          ) {
+
+            notice.textContent =
+              'Use a local .html filename and a local .css filename.';
+
+            return;
+          }
+
+
+          try {
+
+            notice.textContent =
+              'Loading message...';
+
+
+            const [
+              htmlResponse,
+              cssResponse
+            ] = await Promise.all([
+
+              fetch(
+                htmlName,
+                {
+                  credentials: 'same-origin'
+                }
+              ),
+
+              fetch(
+                cssName,
+                {
+                  credentials: 'same-origin'
+                }
+              )
+
+            ]);
+
+
+            if (
+              !htmlResponse.ok ||
+              !cssResponse.ok
+            ) {
+
+              throw new Error(
+                'File not found'
+              );
+            }
+
+
+            const [
+              html,
+              css
+            ] = await Promise.all([
+
+              htmlResponse.text(),
+
+              cssResponse.text()
+
+            ]);
+
+
+            renderMail(
+              html,
+              css
+            );
+
+          } catch {
+
+            notice.textContent =
+              'Could not load one or both server files.';
+
+          }
+
+        }
+      );
+
+
+    /* -------------------------
+       LOAD UPLOADED FILES
+    ------------------------- */
+
+    document
+      .getElementById('loadUpload')
+      .addEventListener(
+        'click',
+        async () => {
+
+          const htmlFile =
+            document
+              .getElementById('htmlUpload')
+              .files[0];
+
+
+          const cssFile =
+            document
+              .getElementById('cssUpload')
+              .files[0];
+
+
+          if (
+            !htmlFile ||
+            !cssFile ||
+            !htmlFile.name
+              .toLowerCase()
+              .endsWith('.html') ||
+            !cssFile.name
+              .toLowerCase()
+              .endsWith('.css')
+          ) {
+
+            notice.textContent =
+              'Choose one .html file and one .css file.';
+
+            return;
+          }
+
+
+          /*
+           * Maximum size:
+           * 1 MB per file.
+           */
+
+          const maxBytes =
+            1024 * 1024;
+
+
+          if (
+            htmlFile.size > maxBytes ||
+            cssFile.size > maxBytes
+          ) {
+
+            notice.textContent =
+              'Each file must be 1 MB or smaller.';
+
+            return;
+          }
+
+
+          try {
+
+            const [
+              html,
+              css
+            ] = await Promise.all([
+
+              htmlFile.text(),
+
+              cssFile.text()
+
+            ]);
+
+
+            renderMail(
+              html,
+              css
+            );
+
+          } catch {
+
+            notice.textContent =
+              'Could not read the selected files.';
+
+          }
+
+        }
+      );
+
+  </script>
+
+</body>
+</html>

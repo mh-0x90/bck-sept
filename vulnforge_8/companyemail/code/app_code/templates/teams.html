@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Teams · CompanyEmail</title>
+  <link rel="stylesheet" href="/static/look.css">
+</head>
+<body>
+<main class="wide">
+  <header>
+    <div>
+      <h1>Hey {{ user.username }}</h1>
+      <p><strong>{{ user.email }}</strong> · team <strong>{{ user.team_name }}</strong> · stored team mail <strong>{{ user.team_email }}</strong></p>
+    </div>
+    <form method="post" action="/logout">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button class="ghost" type="submit">Log out</button>
+    </form>
+  </header>
+
+  {% if error %}<p class="flash error">{{ error }}</p>{% endif %}
+  {% if message %}<p class="flash">{{ message }}</p>{% endif %}
+
+  <section class="panel">
+    <h2>Team filter</h2>
+    <form class="search" method="get">
+      <input name="q" value="{{ query }}" maxlength="120" placeholder="Filter team name">
+      <button type="submit">Filter</button>
+    </form>
+    <div class="results">
+      {% if rows %}
+        {% for team in rows %}
+          <form class="team" method="post" action="/teams/rename/{{ team.id }}">
+            <input type="hidden" name="csrf" value="{{ csrf }}">
+            <input type="hidden" name="q" value="{{ query }}">
+            <strong>{{ team.name }}</strong>
+            <input name="new_name" maxlength="120" placeholder="New team name" required>
+            <button type="submit">Rename</button>
+          </form>
+        {% endfor %}
+      {% else %}
+        <p>No teams returned.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Send local mail</h2>
+    <p>This is separate from team rename.</p>
+    <p>To <strong>{{ user.team_email }}</strong></p>
+    <p>Subject: <strong>CompanyEmail message</strong></p>
+    <form method="post" action="/mail/send">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label>Message<textarea name="body" maxlength="4000" rows="5" required></textarea></label>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <p class="mail">Captured mail appears in <a href="http://localhost:8025" target="_blank" rel="noreferrer">Mailpit</a>.</p>
+</main>
+</body>
+</html>

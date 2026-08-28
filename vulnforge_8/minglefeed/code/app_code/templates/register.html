@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Join · MingleFeed{% endblock %}
+{% block content %}
+<form class="auth card" method="post" action="/register">
+  <input type="hidden" name="_csrf" value="{{ csrf }}">
+  <h1>Create your account</h1>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <label>Username<input name="username" minlength="3" maxlength="40" autocomplete="username" required></label>
+  <label>Password<input name="password" type="password" minlength="10" autocomplete="new-password" required></label>
+  <button type="submit">Join MingleFeed</button>
+</form>
+{% endblock %}

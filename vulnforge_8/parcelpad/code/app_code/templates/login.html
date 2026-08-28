@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Sign in · Parcelpad{% endblock %}
+{% block content %}
+<section class="login-card">
+  <p class="eyebrow">Parcelpad</p>
+  <h1>Sign in</h1>
+  {% if error %}<p class="notice error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" class="login-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Username<input name="username" autocomplete="username" maxlength="80" required></label>
+    <label>Password<input type="password" name="password" autocomplete="current-password" maxlength="256" required></label>
+    <button class="button" type="submit">Sign in</button>
+  </form>
+</section>
+{% endblock %}

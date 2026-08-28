@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Parcelpad{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('home.home') }}">Parcelpad</a>
+    {% if session.get('authenticated') %}
+    <form method="post" action="{{ url_for('logout.logout') }}" class="topbar-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="text-button" type="submit">Sign out</button>
+    </form>
+    {% else %}
+    <span>Sign in</span>
+    {% endif %}
+  </header>
+  <main class="shell">{% block content %}{% endblock %}</main>
+</body>
+</html>

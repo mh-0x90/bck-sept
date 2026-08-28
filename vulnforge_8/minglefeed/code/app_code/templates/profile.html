@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Profile · MingleFeed{% endblock %}
+{% block content %}
+<section class="card profile">
+  <div class="avatar">{{ user.username[:1]|upper }}</div>
+  <div><h1>@{{ user.username }}</h1>
+  {% if account %}<p class="muted">Member since {{ account.created_at[:10] }}</p>{% else %}<p class="muted">Account details are temporarily unavailable.</p>{% endif %}</div>
+</section>
+{% endblock %}

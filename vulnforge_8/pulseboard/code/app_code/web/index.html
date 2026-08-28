@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pulseboard</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="intro">
+      <p class="eyebrow">Connector operations</p>
+      <h1>Refresh regional health</h1>
+      <p>Run availability checks for connectors whose region code partially matches your search.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="form-title">
+      <h2 id="form-title">Health refresh</h2>
+
+      <form id="health-form">
+        <label for="region">Region contains</label>
+        <input
+          id="region"
+          name="region"
+          maxlength="24"
+          autocomplete="off"
+          placeholder="eu"
+          required
+        >
+        <p class="hint">Use letters, numbers, or hyphens.</p>
+
+        <label for="id-filter">Optional ID contains</label>
+        <input
+          id="id-filter"
+          name="id-filter"
+          inputmode="numeric"
+          maxlength="12"
+          autocomplete="off"
+        >
+
+        <button type="submit">Refresh health</button>
+      </form>
+
+      <p id="result" class="result" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Fake local test data. No real credentials.
+root:x:0:0:Training Root:/root:/usr/sbin/nologin
+mingle:x:10001:10001:Mingle User:/home/mingle:/usr/sbin/nologin
+preview:x:10002:10002:Preview Worker:/srv/preview:/usr/sbin/nologin

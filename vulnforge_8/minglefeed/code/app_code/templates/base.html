@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MingleFeed{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">MingleFeed</a>
+  <nav>
+    {% if user %}
+      <a href="/profile">@{{ user.username }}</a>
+      <form action="/logout" method="post" class="inline">
+        <input type="hidden" name="_csrf" value="{{ csrf }}">
+        <button class="link-button" type="submit">Log out</button>
+      </form>
+    {% else %}
+      <a href="/login">Log in</a>
+      <a href="/register">Join</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="shell">{% block content %}{% endblock %}</main>
+</body>
+</html>

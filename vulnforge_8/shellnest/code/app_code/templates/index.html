@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ShellNest</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">local console</p>
+        <h1>ShellNest</h1>
+      </div>
+      <div class="status" id="status" aria-live="polite">
+        <span class="dot"></span>
+        <span>checking</span>
+      </div>
+    </header>
+
+    <section class="panel" aria-label="ShellNest terminal">
+      <div id="terminal" class="terminal" aria-live="polite">
+        <div class="line muted">Connected commands will appear here.</div>
+      </div>
+
+      <form id="command-form" class="command-form" autocomplete="off">
+        <label for="command" class="prompt">shellnest ›</label>
+        <input
+          id="command"
+          name="command"
+          type="text"
+          maxlength="512"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          placeholder="enter command"
+          aria-label="Command"
+        >
+        <button type="submit">Run</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

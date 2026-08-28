@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Feed · MingleFeed{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Share what caught your eye.</h1>
+  <p>Post a thought, attach media, or add a link preview.</p>
+</section>
+
+{% if user %}
+<form class="composer card" action="/posts" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf }}">
+  <label>Post<textarea name="body" maxlength="1000" required placeholder="What’s happening?"></textarea></label>
+  <div class="grid-two">
+    <label>Media URL<input name="media_url" type="url" placeholder="https://…/photo.jpg"></label>
+    <label>Preview URL<input name="preview_url" type="url" placeholder="https://…/article"></label>
+  </div>
+  <button type="submit">Post</button>
+</form>
+{% else %}
+<div class="card callout">Log in or create an account to post.</div>
+{% endif %}
+
+<section class="feed">
+{% for post in posts %}
+<article class="card post">
+  <div class="post-head"><strong>@{{ post.username }}</strong><time>{{ post.created_at[:16].replace('T', ' ') }}</time></div>
+  <p class="post-body">{{ post.body }}</p>
+
+  {% if post.media_url %}
+    {% if post.media_kind == "image" %}
+      <img class="direct-media" src="{{ post.media_url }}" alt="Attached media" loading="lazy">
+    {% elif post.media_kind == "video" %}
+      <video class="direct-media" src="{{ post.media_url }}" controls preload="metadata"></video>
+    {% elif post.media_kind == "audio" %}
+      <audio class="audio" src="{{ post.media_url }}" controls preload="metadata"></audio>
+    {% else %}
+      <a class="media-link" href="{{ post.media_url }}" rel="noopener noreferrer">Open attached media</a>
+    {% endif %}
+  {% endif %}
+
+  {% if post.preview_url %}
+  <div class="preview" data-post-id="{{ post.id }}" data-status="{{ post.preview_status or 'queued' }}">
+    {% if post.preview_status == "ready" %}
+      {% if post.preview_image_url %}<img src="{{ post.preview_image_url }}" alt="Preview image" loading="lazy">{% endif %}
+      <div><span class="eyebrow">{{ post.preview_kind or 'link' }}</span><strong>{{ post.preview_title }}</strong>{% if post.preview_description %}<p>{{ post.preview_description }}</p>{% endif %}</div>
+    {% elif post.preview_status == "failed" %}
+      <span class="muted">Preview unavailable</span>
+    {% else %}
+      <span class="muted">Preparing preview…</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</article>
+{% else %}
+<div class="card empty">No posts yet. A suspiciously peaceful feed.</div>
+{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+services:
+  app-suite:
+    build:
+      context: ..
+      dockerfile: runtime_host/Dockerfile
+    image: eight-app-suite:local
+    init: true
+    ports:
+      - "8080:8080"
+      - "8025:8025"
+      - "8101:8101"
+      - "8102:8102"
+      - "8103:8103"
+      - "8104:8104"
+      - "8105:8105"
+      - "8106:8106"
+      - "8107:8107"
+      - "8108:8108"
+    env_file:
+      - path: .env
+        required: false
+    stop_grace_period: 12s

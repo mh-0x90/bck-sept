@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Parcel Room</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div><strong>Parcel Room</strong><span>Receiving desk</span></div>
+  <span class="online">Service online</span>
+</header>
+<main>
+  <section class="hero">
+    <p class="eyebrow">INBOUND OPERATIONS</p>
+    <h1>Receive and process parcels</h1>
+    <p>Register deliveries individually or import a prepared manifest, then process them from the receiving queue.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Create parcel</h2>
+      <p>Register a delivery at the desk.</p>
+      <form method="post" action="/intake/form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Recipient<input name="recipient" required maxlength="120" autocomplete="name"></label>
+        <label>Tracking number<input name="tracking" required maxlength="120" autocomplete="off"></label>
+        <label>Carrier<input name="carrier" required maxlength="80" autocomplete="organization"></label>
+        <label>Receiving notes<textarea name="notes" maxlength="500" rows="4"></textarea></label>
+        <button type="submit">Save parcel</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Upload manifest</h2>
+      <p>Import parcel details from a JSON manifest.</p>
+      <form method="post" action="/intake/manifest" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label class="upload">Manifest file<input type="file" name="manifest" accept="application/json,.json" required></label>
+        <button type="submit">Import manifest</button>
+      </form>
+      <div class="format">
+        <span>Required fields</span>
+        <code>recipient, tracking, carrier</code>
+      </div>
+    </section>
+  </div>
+
+  {% if result %}
+  <section class="card result">
+    <h2>Processing result</h2>
+    <dl>
+      <div><dt>Parcel</dt><dd>#{{ result.parcel_id }}</dd></div>
+      <div><dt>Recipient</dt><dd>{{ result.recipient }}</dd></div>
+      <div><dt>Tracking</dt><dd>{{ result.tracking }}</dd></div>
+      <div><dt>Document</dt><dd>{{ result.file.name }} (#{{ result.file.id }})</dd></div>
+    </dl>
+    <h3>Receipt contents</h3>
+    <pre class="message">{{ result.content }}</pre>
+    <p><a class="download" href="{{ result.receipt.url }}">Download receipt: {{ result.receipt.name }}</a></p>
+  </section>
+  {% endif %}
+
+  <section class="card queue">
+    <div class="queue-head"><div><h2>Receiving queue</h2><p>Stored parcels waiting for processing.</p></div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Recipient</th><th>Tracking</th><th>Carrier</th><th>Source</th><th>Document</th><th>Created</th><th></th></tr></thead>
+        <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>#{{ row.id }}</td><td>{{ row.recipient }}</td><td>{{ row.tracking }}</td><td>{{ row.carrier }}</td><td>{{ row.source }}</td><td>{{ row.file_name }}</td><td>{{ row.created_at }}</td>
+            <td><form method="post" action="/process/{{ row.id }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="small" type="submit">Process</button></form></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="8" class="empty">No parcels in the queue.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+</body>
+</html>
