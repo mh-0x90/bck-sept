@@ -229,7 +229,7 @@
             </div>
 
 
-            <!-- SERVER FILE MODE -->
+            
 
             <div
               id="serverMode"
@@ -279,7 +279,7 @@
             </div>
 
 
-            <!-- UPLOAD MODE -->
+            
 
             <div
               id="uploadMode"
@@ -408,9 +408,7 @@
       document.getElementById('uploadMode');
 
 
-    /* -------------------------
-       VIEW MODE
-    ------------------------- */
+    
 
     function setMode(mode) {
 
@@ -440,9 +438,7 @@
     }
 
 
-    /* -------------------------
-       FILENAME VALIDATION
-    ------------------------- */
+    
 
     function validFilename(name, extension) {
 
@@ -453,9 +449,7 @@
     }
 
 
-    /* -------------------------
-       CSS SANITIZER
-    ------------------------- */
+    
 
     function sanitizeCss(css) {
 
@@ -502,9 +496,7 @@
     }
 
 
-    /* -------------------------
-       HTML SANITIZER
-    ------------------------- */
+    
 
     function sanitizeHtml(html) {
 
@@ -545,18 +537,13 @@
     }
 
 
-    /* -------------------------
-       RENDER MAIL
-    ------------------------- */
+    
 
     function renderMail(html, css) {
 
       try {
 
-        /*
-         * Sanitize both inputs BEFORE
-         * adding anything to the DOM.
-         */
+        
 
         const cleanHtml =
           sanitizeHtml(html);
@@ -565,18 +552,12 @@
           sanitizeCss(css);
 
 
-        /*
-         * Remove previously displayed
-         * email.
-         */
+        
 
         viewer.replaceChildren();
 
 
-        /*
-         * Create an isolated container
-         * for the email.
-         */
+        
 
         const host =
           document.createElement('div');
@@ -585,11 +566,7 @@
           'mail-content-host';
 
 
-        /*
-         * Shadow DOM prevents the email
-         * stylesheet from styling the
-         * Northstar interface.
-         */
+        
 
         const shadow =
           host.attachShadow({
@@ -597,9 +574,7 @@
           });
 
 
-        /*
-         * Add sanitized email CSS.
-         */
+        
 
         const style =
           document.createElement('style');
@@ -608,9 +583,7 @@
           cleanCss;
 
 
-        /*
-         * Add sanitized email HTML.
-         */
+        
 
         const content =
           document.createElement('div');
@@ -645,9 +618,7 @@
     }
 
 
-    /* -------------------------
-       TABS
-    ------------------------- */
+    
 
     serverTab.addEventListener(
       'click',
@@ -661,9 +632,7 @@
     );
 
 
-    /* -------------------------
-       LOAD SERVER FILES
-    ------------------------- */
+    
 
     document
       .getElementById('loadServer')
@@ -771,9 +740,7 @@
       );
 
 
-    /* -------------------------
-       LOAD UPLOADED FILES
-    ------------------------- */
+    
 
     document
       .getElementById('loadUpload')
@@ -811,10 +778,7 @@
           }
 
 
-          /*
-           * Maximum size:
-           * 1 MB per file.
-           */
+          
 
           const maxBytes =
             1024 * 1024;

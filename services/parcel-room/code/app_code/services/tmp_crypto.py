@@ -39,7 +39,7 @@ def encrypt_text(plaintext: str) -> bytes:
 
 
 def decrypt_text(payload: bytes) -> str:
-    minimum_size = len(_MAGIC) + _NONCE_BYTES + 16  # GCM tag is 16 bytes.
+    minimum_size = len(_MAGIC) + _NONCE_BYTES + 16
     if len(payload) < minimum_size or not payload.startswith(_MAGIC):
         raise TempFileCryptoError("Temporary file has an invalid encrypted format")
 

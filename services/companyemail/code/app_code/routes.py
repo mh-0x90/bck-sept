@@ -536,8 +536,6 @@ class Handler(
 
         form = self.form()
 
-        # Central CSRF check.
-        # Every POST passes here first.
         if not self.valid_csrf(
             form
         ):
@@ -881,8 +879,6 @@ class Handler(
 
             return
 
-        # Rename only.
-        # No mail is sent here.
         self.redirect(
             "/teams?note=changed"
         )
@@ -917,8 +913,6 @@ class Handler(
 
             return
 
-        # Read the current name directly
-        # from the teams table.
         team_name = get_team_name(
             user["team_id"]
         )
