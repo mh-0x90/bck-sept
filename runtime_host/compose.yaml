@@ -16,6 +16,7 @@ services:
       - "8106:8106"
       - "8107:8107"
       - "8108:8108"
+      - "8109:8109"
     env_file:
       - path: .env
         required: false

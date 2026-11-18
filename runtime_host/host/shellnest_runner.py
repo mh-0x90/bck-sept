@@ -7,8 +7,8 @@ import threading
 from pathlib import Path
 
 sys.path.insert(0, "/opt/apps/shellnest")
-from app_code.shell_server import ShellServer  # noqa: E402
-from app_code.web import make_proxy_server  # noqa: E402
+from app_code.shell_server import ShellServer
+from app_code.web import make_proxy_server
 
 
 def main() -> None:

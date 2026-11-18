@@ -6,10 +6,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Shared OS prerequisites from the original app images/compose definitions:
-# - nginx: Mailbox static server
-# - postgresql: ParcelPad database
-# - curl + ca-certificates: ShellNest command environment
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        nginx postgresql curl ca-certificates \
@@ -17,8 +13,6 @@ RUN apt-get update \
 
 COPY --from=mailpit /mailpit /usr/local/bin/mailpit
 
-# Keep each application's Python dependency set isolated so QuickCart and
-# ParcelPad can retain different Flask/Gunicorn versions.
 COPY runtime_host/requirements /tmp/app-requirements
 RUN python -m venv /opt/venvs/companyemail \
     && /opt/venvs/companyemail/bin/pip install --no-cache-dir -r /tmp/app-requirements/companyemail.txt \
@@ -33,22 +27,25 @@ RUN python -m venv /opt/venvs/companyemail \
     && python -m venv /opt/venvs/quickcart \
     && /opt/venvs/quickcart/bin/pip install --no-cache-dir -r /tmp/app-requirements/quickcart.txt \
     && python -m venv /opt/venvs/shellnest \
+    && python -m venv /opt/venvs/documentsmng \
+    && /opt/venvs/documentsmng/bin/pip install --no-cache-dir -r /tmp/app-requirements/documentsmng.txt \
     && rm -rf /tmp/app-requirements
 
-RUN for u in dashboard companyemail mailbox minglefeed parcelroom parcelpad pulseboard quickcart shellnest; do \
+RUN for u in dashboard companyemail mailbox minglefeed parcelroom parcelpad pulseboard quickcart shellnest documentsmng; do \
       groupadd --system "$u"; \
       useradd --system --gid "$u" --home-dir /nonexistent --shell /usr/sbin/nologin "$u"; \
     done \
     && mkdir -p /opt/apps /opt/host /tmp/runtime /run/parcelpad
 
-COPY vulnforge_8/companyemail/code/app_code /opt/apps/companyemail/app_code
-COPY vulnforge_8/mailbox/code/app_code /opt/apps/mailbox/app_code
-COPY vulnforge_8/minglefeed/code/app_code /opt/apps/minglefeed/app_code
-COPY vulnforge_8/parcel-room/code/app_code /opt/apps/parcel-room/app_code
-COPY vulnforge_8/parcelpad/code/app_code /opt/apps/parcelpad/app_code
-COPY vulnforge_8/pulseboard/code/app_code /opt/apps/pulseboard/app_code
-COPY vulnforge_8/quickcart/code/app_code /opt/apps/quickcart/app_code
-COPY vulnforge_8/shellnest/code/app_code /opt/apps/shellnest/app_code
+COPY services/companyemail/code/app_code /opt/apps/companyemail/app_code
+COPY services/mailbox/code/app_code /opt/apps/mailbox/app_code
+COPY services/minglefeed/code/app_code /opt/apps/minglefeed/app_code
+COPY services/parcel-room/code/app_code /opt/apps/parcel-room/app_code
+COPY services/parcelpad/code/app_code /opt/apps/parcelpad/app_code
+COPY services/pulseboard/code/app_code /opt/apps/pulseboard/app_code
+COPY services/quickcart/code/app_code /opt/apps/quickcart/app_code
+COPY services/shellnest/code/app_code /opt/apps/shellnest/app_code
+COPY services/documentsmng /opt/apps/documentsmng
 COPY runtime_host/host /opt/host
 
 RUN chown -R companyemail:companyemail /opt/apps/companyemail \
@@ -59,6 +56,7 @@ RUN chown -R companyemail:companyemail /opt/apps/companyemail \
     && chown -R pulseboard:pulseboard /opt/apps/pulseboard \
     && chown -R quickcart:quickcart /opt/apps/quickcart \
     && chown -R shellnest:shellnest /opt/apps/shellnest \
+    && chown -R documentsmng:documentsmng /opt/apps/documentsmng \
     && chmod 0711 /opt/apps \
     && find /opt/apps -mindepth 1 -maxdepth 1 -type d -exec chmod 0750 {} + \
     && find /opt/apps -mindepth 2 -type d -exec chmod 0750 {} + \
@@ -74,6 +72,7 @@ RUN chown -R companyemail:companyemail /opt/apps/companyemail \
        /tmp/runtime/pulseboard \
        /tmp/runtime/quickcart \
        /tmp/runtime/shellnest/workspace \
+       /tmp/runtime/documentsmng \
     && chown -R dashboard:dashboard /tmp/runtime/dashboard \
     && chown -R companyemail:companyemail /tmp/runtime/companyemail \
     && chown -R minglefeed:minglefeed /tmp/runtime/minglefeed \
@@ -82,12 +81,10 @@ RUN chown -R companyemail:companyemail /opt/apps/companyemail \
     && chown -R pulseboard:pulseboard /tmp/runtime/pulseboard \
     && chown -R quickcart:quickcart /tmp/runtime/quickcart \
     && chown -R shellnest:shellnest /tmp/runtime/shellnest \
+    && chown -R documentsmng:documentsmng /tmp/runtime/documentsmng \
     && chmod 0755 /run/parcelpad
 
-# 8080 = application hub, 8025 = local mail inbox.
-# 8101-8108 = the eight applications. Supporting ports (1025, 5432, 8765,
-# 9000, 9001, 9101) remain internal to the container.
-EXPOSE 8025 8080 8101 8102 8103 8104 8105 8106 8107 8108
+EXPOSE 8025 8080 8101 8102 8103 8104 8105 8106 8107 8108 8109
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=25s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2).read()" || exit 1

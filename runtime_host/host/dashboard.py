@@ -16,6 +16,7 @@ APPS = (
     ("Pulseboard", 8106, "Connector health dashboard", None),
     ("QuickCart", 8107, "Shopping and receipt flow", None),
     ("ShellNest", 8108, "Command workspace", None),
+    ("DocumentsMng", 8109, "Document management and export", None),
 )
 
 STYLE = r"""

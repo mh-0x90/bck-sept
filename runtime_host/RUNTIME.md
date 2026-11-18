@@ -1,14 +1,14 @@
 # Combined application runtime
 
-Place this `runtime_host/` directory beside the existing `vulnforge_8/` directory:
+Place this `runtime_host/` directory beside the existing `services/` directory:
 
 ```text
 benchmark_vul_v1/
-├── vulnforge_8/
+├── services/
 └── runtime_host/
 ```
 
-No file under `vulnforge_8/` needs to be modified.
+No file under `services/` needs to be modified.
 
 ## Start
 

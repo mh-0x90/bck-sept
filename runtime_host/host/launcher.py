@@ -186,15 +186,12 @@ def main() -> int:
     signal.signal(signal.SIGTERM, terminate)
     signal.signal(signal.SIGINT, terminate)
 
-    # Writable state, isolated by Unix ownership.
-    for name in ("dashboard", "companyemail", "mailbox", "minglefeed", "parcel-room", "parcelpad", "pulseboard", "quickcart", "shellnest"):
+    for name in ("dashboard", "companyemail", "mailbox", "minglefeed", "parcel-room", "parcelpad", "pulseboard", "quickcart", "shellnest", "documentsmng"):
         (RUNTIME / name).mkdir(parents=True, exist_ok=True)
 
     db_password, parcelpad_username = prepare_parcelpad_secrets()
     prepare_postgres(db_password)
 
-    # CompanyEmail prerequisite: the original image embeds Mailpit. SMTP stays
-    # loopback-only on 1025; the Mailpit UI is exposed on 8025.
     start(
         "companyemail-mailpit",
         [
@@ -224,13 +221,11 @@ def main() -> int:
         env=companyemail_env,
     )
 
-    # Mailbox prerequisite: serve with Nginx, as in its original Dockerfile.
     start(
         "mailbox",
         ["/usr/sbin/nginx", "-c", "/opt/host/nginx-mailbox.conf", "-g", "daemon off;"],
     )
 
-    # MingleFeed retains its original DB location semantics and internal service.
     start(
         "minglefeed",
         ["/opt/venvs/minglefeed/bin/python", "app.py"],
@@ -242,8 +237,6 @@ def main() -> int:
         },
     )
 
-    # Parcel Room requires this 32-byte URL-safe base64 key. The default below
-    # is the same value used by the original Dockerfile; it may be overridden.
     parcel_key = os.environ.get(
         "PARCEL_TMP_ENCRYPTION_KEY",
         "VEVTVF9QQVJDRUxfUk9PTV9LRVlfMzJfQllURVMhISE=",
@@ -262,8 +255,6 @@ def main() -> int:
         },
     )
 
-    # ParcelPad reproduces the Compose prerequisites inside this container:
-    # PostgreSQL, generated secret files, receiver service, then Gunicorn web.
     receiver_delay = os.environ.get("PARCELPAD_RECEIVER_DELAY", os.environ.get("RECEIVER_DELAY", "6"))
     receiver_env = {
         "RECEIVER_DELAY": receiver_delay,
@@ -315,8 +306,6 @@ def main() -> int:
         user="pulseboard",
     )
 
-    # QuickCart retains the env values from its original Dockerfile. Only the
-    # self-referential log-service URL is adjusted for the combined web port.
     start(
         "quickcart",
         [
@@ -339,7 +328,6 @@ def main() -> int:
         },
     )
 
-    # ShellNest retains curl, APP_ENV=testing and its loopback command server.
     start(
         "shellnest",
         ["/opt/venvs/shellnest/bin/python", "/opt/host/shellnest_runner.py"],
@@ -351,6 +339,17 @@ def main() -> int:
             "SHELLNEST_WEB_PORT": "8108",
             "SHELLNEST_INTERNAL_PORT": "8765",
         },
+    )
+
+    start(
+        "documentsmng",
+        [
+            "/opt/venvs/documentsmng/bin/gunicorn",
+            "--bind", "0.0.0.0:8109", "--workers", "2", "--threads", "2",
+            "app:create_app()",
+        ],
+        cwd="/opt/apps/documentsmng",
+        user="documentsmng",
     )
 
     start(
